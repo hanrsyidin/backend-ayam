@@ -131,9 +131,13 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:3000",
+    "https://frontend-ayam.vercel.app",
+    "https://frontend-ayam-hanrsyidin.vercel.app",
 ]
 CSRF_TRUSTED_ORIGINS = [
     "http://localhost:3000",
+    "https://frontend-ayam.vercel.app",
+    "https://frontend-ayam-hanrsyidin.vercel.app",
 ]
 
 ALLOWED_HOSTS = [
