@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 """
 
 from pathlib import Path
+import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -20,10 +21,16 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-t^$_(u(qg_)rp54q#c13qz-%8#=l1075@2mkt&nm3)ov27k)gw'
+# SECRET_KEY = 'django-insecure-t^$_(u(qg_)rp54q#c13qz-%8#=l1075@2mkt&nm3)ov27k)gw'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+# DEBUG = True
+
+# MENJADI INI:
+SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY', 'django-insecure-kunci-cadangan-buat-laptop-aja')
+
+# Kalau di Vercel nanti stringnya 'False', maka jadi False. Di laptop default True.
+DEBUG = os.environ.get('DEBUG', 'True') == 'True'
 
 ALLOWED_HOSTS = []
 
