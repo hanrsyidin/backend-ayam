@@ -26,10 +26,8 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # SECURITY WARNING: don't run with debug turned on in production!
 # DEBUG = True
 
-# MENJADI INI:
 SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY', 'django-insecure-kunci-cadangan-buat-laptop-aja')
 
-# Kalau di Vercel nanti stringnya 'False', maka jadi False. Di laptop default True.
 DEBUG = os.environ.get('DEBUG', 'True') == 'True'
 
 ALLOWED_HOSTS = []

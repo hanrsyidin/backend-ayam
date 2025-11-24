@@ -4,12 +4,12 @@ from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 import json
 import joblib
-import pandas as pd
 import os
-from .models import PredictionHistory  # <--- Import Model History
+from .models import PredictionHistory
 
-# Load model SATU KALI SAJA saat server nyala (biar cepat)
-# Pastikan path file .sav benar
+# HAPUS IMPORT INI: import pandas as pd 
+
+# Load model ... (kode load model tetap sama) ...
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 MODEL_PATH = os.path.join(BASE_DIR, 'model_ayam_pintar.sav')
 model = joblib.load(MODEL_PATH)
@@ -20,20 +20,27 @@ def predict_egg(request):
         try:
             data = json.loads(request.body)
             
-            # 1. Proses Prediksi (Sama kayak tadi)
-            input_data = pd.DataFrame([{
-                'Amount_of_chicken': float(data.get('amount_chicken')),
-                'Amount_of_Feeding': float(data.get('feed_intake')),
-                'Temperature': float(data.get('temperature')),
-                'Humidity': float(data.get('humidity')),
-                'Light_Intensity': float(data.get('light')),
-                'Ammonia': float(data.get('ammonia')),
-                'Noise': float(data.get('noise')),
-            }])
-            prediction = model.predict(input_data)[0]
+            # --- BAGIAN YANG DIUBAH (DIET PANDAS) ---
+            # Model menerima input berupa Array 2 Dimensi [[nilai1, nilai2, ...]]
+            # PENTING: Urutannya WAJIB SAMA PERSIS dengan saat training tadi!
+            # Urutan: Ayam, Pakan, Suhu, Lembab, Cahaya, Amonia, Bising
+            
+            input_list = [[
+                float(data.get('amount_chicken')),
+                float(data.get('feed_intake')),
+                float(data.get('temperature')),
+                float(data.get('humidity')),
+                float(data.get('light')),
+                float(data.get('ammonia')),
+                float(data.get('noise'))
+            ]]
+            
+            # Prediksi langsung pakai list (gak perlu DataFrame)
+            prediction = model.predict(input_list)[0]
             hasil_bulat = round(prediction)
+            # ----------------------------------------
 
-            # 2. SIMPAN KE DATABASE (BARU!)
+            # Simpan ke DB (Tetap sama)
             PredictionHistory.objects.create(
                 amount_chicken=data.get('amount_chicken'),
                 feed_intake=data.get('feed_intake'),
@@ -48,7 +55,7 @@ def predict_egg(request):
             return JsonResponse({
                 'status': 'success',
                 'prediction': hasil_bulat,
-                'message': 'Prediksi berhasil dan tersimpan!'
+                'message': 'Prediksi berhasil!'
             })
         except Exception as e:
             return JsonResponse({'status': 'error', 'message': str(e)})
