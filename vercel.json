@@ -1,0 +1,13 @@
+{
+    "builds": [{
+        "src": "backend_ayam/wsgi.py",
+        "use": "@vercel/python",
+        "config": { "maxLambdaSize": "15mb", "runtime": "python3.9" }
+    }],
+    "routes": [
+        {
+            "src": "/(.*)",
+            "dest": "backend_ayam/wsgi.py"
+        }
+    ]
+}
