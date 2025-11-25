@@ -7,9 +7,6 @@ import joblib
 import os
 from .models import PredictionHistory
 
-# HAPUS IMPORT INI: import pandas as pd 
-
-# Load model ... (kode load model tetap sama) ...
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 MODEL_PATH = os.path.join(BASE_DIR, 'model_ayam_pintar.sav')
 model = joblib.load(MODEL_PATH)
@@ -19,11 +16,6 @@ def predict_egg(request):
     if request.method == 'POST':
         try:
             data = json.loads(request.body)
-            
-            # --- BAGIAN YANG DIUBAH (DIET PANDAS) ---
-            # Model menerima input berupa Array 2 Dimensi [[nilai1, nilai2, ...]]
-            # PENTING: Urutannya WAJIB SAMA PERSIS dengan saat training tadi!
-            # Urutan: Ayam, Pakan, Suhu, Lembab, Cahaya, Amonia, Bising
             
             input_list = [[
                 float(data.get('amount_chicken')),
@@ -35,12 +27,10 @@ def predict_egg(request):
                 float(data.get('noise'))
             ]]
             
-            # Prediksi langsung pakai list (gak perlu DataFrame)
             prediction = model.predict(input_list)[0]
             hasil_bulat = round(prediction)
             # ----------------------------------------
 
-            # Simpan ke DB (Tetap sama)
             PredictionHistory.objects.create(
                 amount_chicken=data.get('amount_chicken'),
                 feed_intake=data.get('feed_intake'),
@@ -60,9 +50,7 @@ def predict_egg(request):
         except Exception as e:
             return JsonResponse({'status': 'error', 'message': str(e)})
 
-# 3. Fungsi Baru: Ambil Data History
 def get_history(request):
-    # Ambil 10 data terbaru
     history_data = PredictionHistory.objects.all().order_by('-created_at')[:10]
     
     data_list = []
@@ -70,7 +58,6 @@ def get_history(request):
         data_list.append({
             'id': item.id,
             'date': item.created_at.strftime("%d-%m-%Y %H:%M"),
-            # --- UPDATE: Masukkan semua kolom input ---
             'chicken': item.amount_chicken,
             'feed': item.feed_intake,
             'temp': item.temperature,
@@ -78,7 +65,6 @@ def get_history(request):
             'light': item.light,
             'ammonia': item.ammonia,
             'noise': item.noise,
-            # ----------------------------------------
             'result': item.prediction_result
         })
     

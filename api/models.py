@@ -16,7 +16,7 @@ class PredictionHistory(models.Model):
     # Hasil Prediksi
     prediction_result = models.IntegerField()
     
-    # Waktu Pencatatan (Otomatis terisi saat disimpan)
+    # Waktu Pencatatan
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
