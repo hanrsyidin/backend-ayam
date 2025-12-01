@@ -20,6 +20,6 @@ from api.views import predict_egg, get_history
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('api/predict/', predict_egg),
-    path('api/history/', get_history),
+    path('api/predict', predict_egg),
+    path('api/history', get_history),
 ]
