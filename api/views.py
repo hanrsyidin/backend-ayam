@@ -1,5 +1,6 @@
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
+from django.views.decorators.http import require_http_methods
 import json
 # Hapus import joblib dan os yang buat load model berat
 # import joblib 
@@ -12,6 +13,7 @@ from .models import PredictionHistory
 # model = joblib.load(MODEL_PATH)
 
 @csrf_exempt
+@require_http_methods(["POST", "OPTIONS"])
 def predict_egg(request):
     if request.method == 'POST':
         try:
