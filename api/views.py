@@ -47,16 +47,16 @@ def predict_egg(request):
             # ---------------------------------------------------
 
             # Simpan ke Database (SQLite)
-            PredictionHistory.objects.create(
-                amount_chicken=ayam,
-                feed_intake=pakan,
-                temperature=temp,
-                humidity=humid,
-                light=light,
-                ammonia=ammonia,
-                noise=noise,
-                prediction_result=hasil_bulat
-            )
+            # PredictionHistory.objects.create(
+            #     amount_chicken=ayam,
+            #     feed_intake=pakan,
+            #     temperature=temp,
+            #     humidity=humid,
+            #     light=light,
+            #     ammonia=ammonia,
+            #     noise=noise,
+            #     prediction_result=hasil_bulat
+            # )
             
             return JsonResponse({
                 'status': 'success',
